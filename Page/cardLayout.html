@@ -1,0 +1,174 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Google</title>
+    <meta charset="UTF-8" />
+    <!--ExtJs框架开始-->
+    <script type="text/javascript" src="../ext-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../ext-3.3.0/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="../ext-3.3.0/resources/css/ext-all.css" />
+    <!--ExtJs框架结束-->
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var navHandler = function (direction) {
+                var wizard = Ext.getCmp('wizard').layout;
+                var prev = Ext.getCmp('move-prev');
+                var next = Ext.getCmp('move-next');
+                var activeId = wizard.activeItem.id;
+
+                if (activeId == 'card-0') {
+                    if (direction == 1) {
+                        wizard.setActiveItem(1);
+                        prev.setDisabled(false);
+                        next.setDisabled(false);
+                    }
+                } else if (activeId == 'card-1') {
+                    if (direction == -1) {
+                        wizard.setActiveItem(0);
+                        prev.setDisabled(true);
+                        next.setDisabled(false);
+                    } else {
+                        wizard.setActiveItem(2);
+                        prev.setDisabled(false);
+                        next.setDisabled(true);
+                    }
+                } else if (activeId == 'card-2') {
+                    if (direction == -1) {
+                        wizard.setActiveItem(1);
+                        prev.setDisabled(false);
+                        next.setDisabled(false);
+                    }
+                }
+            };
+
+            var Q1 = new Ext.form.RadioGroup({
+                // fieldLabel: 'Q1:番茄酱属于以下哪种垃圾？（单选）',
+                id: 'Question1',
+                cls: 'Font-size',
+                items: [{
+                    id: 'child1',
+                    checked: false,
+                    defaultType: 'radio',
+                    items: [
+                        { xtype: 'label', html: '<h1>Q1:番茄酱属于以下哪种垃圾？（单选）</h1>' },
+                        { boxLabel: '湿垃圾', name: 'laji' },
+                        { boxLabel: '干垃圾', name: 'laji' },
+                        { boxLabel: '有害垃圾', name: 'laji' },
+                        { boxLabel: '可回收物', name: 'laji' }
+                    ]
+                }]
+            });
+
+            Q1.on('change', function (rdgroup, checked) {
+                Ext.getCmp('child1').checked = true;
+            });
+
+            var Q50 = new Ext.form.CheckboxGroup({
+                fieldLabel: 'checkBox',
+                id: 'Question50',
+                cls: 'Font-size',
+                items: [{
+                    id: 'child50',
+                    checked: false,
+                    defaultType: 'checkbox',
+                    items: [
+                        { xtype: 'label', html: '<h1>Q50:王大叔出门遛狗后，哪些是正确处理狗粑粑的方法？（多选）</h1>' },
+                        { boxLabel: '把粑粑用废报纸包好带回家冲掉' },
+                        { boxLabel: '受污染的报纸按有害垃圾处理' },
+                        { boxLabel: '没受污染的报纸按可回垃圾处理' },
+                        { boxLabel: '受污染的报纸浸水后当湿垃圾处理' }
+                    ]
+                }]
+            });
+
+            Q50.on('change', function (rdgroup, checked) {
+                for (var i = 0; i < checked.length; i++) {
+                    if (checked[i].getRawValue() == 'on')
+                        Ext.getCmp('child50').checked = true
+                }
+            });
+
+            var SubmitBtn = new Ext.Button({
+                text: 'Submit',
+                width: 100,
+                height: 30,
+                cls: 'Button-Margin',
+            });
+
+            SubmitBtn.on('click', function () {
+                if (Ext.getCmp('child1').checked == true && Ext.getCmp('child50').checked == true){
+                    alert('Congratulation!');
+                    window.location.reload()
+                }
+                else
+                    alert('请填完答卷再提交!')
+            })
+
+            var card = new Ext.Panel({
+                title: 'Day2 Homework',
+                id: 'wizard',
+                layout: 'card',
+                cls: 'Center',
+                activeItem: 0, 
+                bodyStyle: 'padding:15px',
+                height: 190,
+                width: 400,
+                defaults: {
+                    border: false
+                },
+                bbar: [
+                    {
+                        id: 'move-prev',
+                        text: 'Back',
+                        handler: navHandler.createDelegate(this, [-1]),
+                        disabled: true
+                    },
+                    '->', 
+                    {
+                        id: 'move-next',
+                        text: 'Next',
+                        handler: navHandler.createDelegate(this, [1])
+                    }
+                ],
+                items: [{
+                    id: 'card-0',
+                    autoheight: true,
+                    items: [Q1]
+                }, {
+                    id: 'card-1',
+                    autoheight: true,
+                    items: [Q50]
+                }, {
+                    id: 'card-2',
+                    items: [SubmitBtn]
+                }],
+                renderTo: 'card'
+            });
+        })
+    </script>
+</head>
+<style>
+    .Font-size {
+        font-size: 10px
+    }
+
+    .Center {
+        margin-left: 700px;
+        margin-top: 250px;
+        width: 800px;
+        height: 400px;
+    }
+
+    .Button-Margin {
+        margin: 35px 130px;
+        color:blue
+    }
+</style>
+
+<body>
+    <div id="card"></div>
+</body>
+
+</html>
